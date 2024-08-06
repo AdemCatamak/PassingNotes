@@ -1,0 +1,5 @@
+{
+  "name": "PassingNotesDevContainer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "pn-dev-container"
+}

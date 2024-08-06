@@ -1,0 +1,22 @@
+services:
+
+  pn-dev-container:
+    container_name: pn-dev-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+    command:
+      - sleep infinity
+    depends_on:
+      - pn-redis
+    environment:
+      - PORT=80
+      - REDIS_HOST=redis://pn-redis:6379
+    ports:
+      - "8080:80"
+
+  pn-redis:
+    container_name: pn-redis
+    image: redis:6.2.3-alpine
