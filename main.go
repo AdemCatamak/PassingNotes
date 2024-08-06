@@ -2,7 +2,6 @@ package main
 
 import (
 	"PassingNotes/notes"
-	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -10,15 +9,19 @@ import (
 
 func init() {
 
+	log.Print("init function was triggered")
+
 	err := godotenv.Load()
 	if err != nil {
-		e := errors.Join(err, errors.New("error loading .env file"))
-		panic(e)
+		log.Print(err)
 	}
 
+	log.Print("init function was completed")
 }
 
 func main() {
+
+	log.Print("main function was triggered")
 
 	g := gin.Default()
 	g.Use(gin.Recovery())
