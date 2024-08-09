@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/redis/go-redis/v9"
+	"log"
 	"time"
 )
 
@@ -17,6 +18,8 @@ type IStore interface {
 }
 
 func NewStore() IStore {
+	log.Print("New Store was triggered")
+
 	redisClient := shared.NewRedisClient()
 	store := Store{
 		redisClient: redisClient,

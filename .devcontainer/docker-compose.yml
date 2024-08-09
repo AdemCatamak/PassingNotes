@@ -13,7 +13,7 @@ services:
       - pn-redis
     environment:
       - PORT=80
-      - REDIS_HOST=redis://pn-redis:6379
+      - REDIS_HOST=pn-redis:6379
     ports:
       - "8080:80"
 

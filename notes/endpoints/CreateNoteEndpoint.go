@@ -5,6 +5,7 @@ import (
 	"PassingNotes/notes/stores"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
 )
 
@@ -17,6 +18,8 @@ type CreateNoteResp struct {
 }
 
 func CreateNote(context *gin.Context) {
+
+	log.Print("Create Note was triggered")
 
 	var req CreateNoteReq
 	err := context.ShouldBindJSON(&req)
