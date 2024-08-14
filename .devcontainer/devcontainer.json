@@ -1,5 +1,9 @@
 {
   "name": "PassingNotesDevContainer",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "pn-dev-container"
+  "dockerComposeFile": [
+    "docker-compose.infra.yml",
+    "docker-compose.yml"
+  ],
+  "service": "pn-dev-container",
+  "workspaceFolder": "/workspace"
 }

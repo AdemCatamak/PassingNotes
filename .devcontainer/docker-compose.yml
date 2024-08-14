@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ../..:/workspaces:cached
+      - ..:/workspace:cached
     command:
       - sleep infinity
     depends_on:
@@ -16,7 +16,3 @@ services:
       - REDIS_HOST=pn-redis:6379
     ports:
       - "8080:80"
-
-  pn-redis:
-    container_name: pn-redis
-    image: redis:6.2.3-alpine
