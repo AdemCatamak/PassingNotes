@@ -6,6 +6,10 @@ This project is a simple, passing notes application built using Go. It leverages
 * _**POST /api/notes**_ Accepts a text message as input and stores it in Redis for a maximum of 5 minutes.
 * _**DELETE /api/notes/:id**_ Searches for a note based on a provided key. If found, the note is returned to the user and then deleted from Redis. This ensures a one-time read message system.
 
+Also, a screen like the one below can be accessible with **"/"** and **"/index"**. Via this screen, requests can be sent to the two endpoints mentioned above.
+
+<img src="./docs/images/index_page.png" width="700" alt="index_page">
+
 ## Run Application
 
 ### DevContainer (Recommended)

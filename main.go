@@ -26,8 +26,7 @@ func main() {
 	g := gin.Default()
 	g.Use(gin.Recovery())
 
-	api := g.Group("/api")
-	notes.Register(api.Group("/notes"))
+	notes.Register(g)
 
 	log.Fatal(g.Run())
 

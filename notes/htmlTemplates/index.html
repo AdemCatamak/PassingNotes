@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passing Notes</title>
+    <style>
+        /* General page layout */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Main container for both sections */
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 900px;
+            width: 100%;
+            gap: 20px; /* Space between the two containers */
+        }
+
+        /* Individual containers for Save and Fetch sections */
+        .note-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 48%; /* Make each section take up almost half the width */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+
+        /* Heading styles */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        /* Input and button styles */
+        textarea, input[type="text"] {
+            width: 100%; /* Make the input and textarea take full width of their container */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        button {
+            width: 100%; /* Make the button take full width of its container */
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px; /* Add space below the button */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Disabled textarea for displaying fetched note */
+        textarea[disabled] {
+            background-color: #f9f9f9;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 600px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .note-section {
+                width: 90%; /* Make sections full-width on small screens */
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="note-section" id="save-note">
+        <h2>Save a Note</h2>
+        <textarea id="noteText" placeholder="Write a note..."></textarea>
+        <br>
+        <button onclick="saveNote()">Save</button>
+        <p id="savedNoteResult"></p>
+    </div>
+
+    <div class="note-section" id="query-note">
+        <h2>Fetch a Note</h2>
+        <input type="text" id="noteId" placeholder="Note Id"><br>
+        <button onclick="queryNote()">Fetch</button>
+        <textarea id="queryNoteResult" disabled></textarea>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+
+    window.onload = function () {
+        const noteId = window.location.pathname.split('/').at(1);
+
+        if (noteId) {
+            document.getElementById('noteId').value = noteId;
+            queryNote();
+        }
+    }
+
+    function saveNote() {
+        const noteTextAreaElement = document.getElementById('noteText');
+        const saveNoteResultPElement = document.getElementById('savedNoteResult');
+
+        const noteText = noteTextAreaElement.value;
+
+        fetch('/api/notes',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({text: noteText})
+            }
+        )
+            .then(response => {
+                if (response.status === 201) {
+                    return response.json();
+                } else {
+                    throw new Error("Unexpected error");
+                }
+            })
+            .then(data => {
+                const noteId = data.id;
+                saveNoteResultPElement.innerText = `Note Id: ${noteId}`;
+                noteTextAreaElement.value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                saveNoteResultPElement.innerText = error.message;
+            });
+    }
+
+    function queryNote() {
+        const noteIdInputElement = document.getElementById('noteId')
+        const queryNoteResultPElement = document.getElementById('queryNoteResult');
+
+        const noteId = noteIdInputElement.value;
+
+        fetch(`/api/notes/${noteId}`,
+            {
+                method: 'DELETE'
+            }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else if (response.status === 404) {
+                    throw new Error('Note not exist');
+                } else {
+                    throw new Error('Unexpected error');
+                }
+            })
+            .then(data => {
+                queryNoteResultPElement.innerText = data.text;
+                noteIdInputElement.value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                queryNoteResultPElement.innerText = error.message;
+            });
+    }
+</script>
+</body>
+</html>
