@@ -15,9 +15,7 @@ func Register(g *gin.Engine) {
 
 	g.GET("/", serveIndexHtml)
 	g.GET("/index", serveIndexHtml)
-	g.GET(":noteId", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+	g.GET(":noteId", serveIndexHtml)
 
 	group := g.Group("/api/notes")
 
