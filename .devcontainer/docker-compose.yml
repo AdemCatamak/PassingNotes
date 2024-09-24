@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ..:/workspace:cached
+      - ..:/workspace
     command:
       - sleep infinity
     depends_on:
@@ -14,5 +14,8 @@ services:
     environment:
       - PORT=80
       - REDIS_HOST=pn-redis:6379
+      - GOROOT=/usr/local/go
+      - GOPATH=/go
+      - GO111MODULE=on
     ports:
       - "8080:80"
